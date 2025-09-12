@@ -22,4 +22,4 @@ class Logger:
     def read_log(self, last_n: int=10) -> str:
         with open(self.log_path,"r",encoding="utf-8") as f:
             lines = f.readlines()
-            return "".join(lines[-last+n:]) if lines else "(无记录)"
+            return "".join(lines[-last_n:]) if lines else "(无记录)"

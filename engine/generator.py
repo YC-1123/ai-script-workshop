@@ -9,7 +9,7 @@ OPENAI_API_KEY = "sk-f8bc4b9248224d7c9a8de15db033ab53"
 # 使用deepseek接口构建模型客户端
 
 client = OpenAI(
-    api_key=os.getenv(OPENAI_API_KEY),
+    api_key=OPENAI_API_KEY,
     base_url="https://api.deepseek.com"
 )
 
