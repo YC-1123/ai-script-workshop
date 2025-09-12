@@ -1,12 +1,12 @@
 # debug/inspector.py
 
-from debug.logger import Logger
-from interaction.user_query_handler import UserQueryHandler
+from debug.logging import Logger
+from user_input.direct_edit import UserQueryHandler
 
 class DebugConsole:
-    self.logger = Logger()
-    self.handler = UserQueryHandler()
-
+    def __init__(self):
+        self.logger = Logger()
+        self.handler = UserQueryHandler()
     def run(self):
         print("【调试控制台】输入命令，如：切换情绪：喜悦，输入 quit 退出\n")
 

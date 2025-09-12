@@ -1,7 +1,7 @@
 # director.py
 import asyncio
 from actors.context_manager import CharacterContextManager
-from prompts.story_templates import get_story_intro
+from prompts.story_templates import GetStoryIntro
 class StoryDirector:
     def __init__(self):
         # 定义角色名称与剧情阶段
@@ -17,7 +17,7 @@ class StoryDirector:
             self.contexts[name].initialize_context()
         print("【系统】初始化完成，当前参与角色：", "、".join(self.character_names))
         # 输出剧情介绍 prompts.story_templates
-        print(f"\n【系统】{get_story_intro()}")
+        print(f"\n【系统】{GetStoryIntro()}")
 
     async def run_story_loop(self):
         print("\n【系统】剧情演化开始\n")

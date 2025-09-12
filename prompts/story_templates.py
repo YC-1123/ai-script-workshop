@@ -1,6 +1,6 @@
 # prompts/story_templates.py
 
-def get_story_intro() -> str:
+def GetStoryIntro() -> str:
     return(
         "故事背景设定如下：\n"
         "德拉库尼亚的圣诞节是一场支持君主复辟的庆典。贵族们围聚在一起，交换礼物，追忆过去的美好时光，直到大家发现扮演圣诞老人的家伙被杀了...\n"

@@ -3,11 +3,11 @@
 from collections import defaultdict
 
 EMOTION_TRIGGERS = {
-    "愤怒":["愤怒","欺骗","不公","威胁","不安"]
-    "喜悦":["开心","惊喜","美好","希望","信任"]
-    "悲伤":["难过","孤独","后悔","失落","委屈"]
-    "戒备":["隐藏","怀疑","防备"]
-    "理解":["共鸣","原谅","宽容","认同"]
+    "愤怒": ["愤怒", "欺骗", "不公", "威胁", "不安"],
+    "喜悦": ["开心", "惊喜", "美好", "希望", "信任"],
+    "悲伤": ["难过", "孤独", "后悔", "失落", "委屈"],
+    "戒备": ["隐藏", "怀疑", "防备"],
+    "理解": ["共鸣", "原谅", "宽容", "认同"]
 }
 
 def update_emotion_from_text(current_emotion: str, response_text: str) -> str:
@@ -22,6 +22,6 @@ def update_emotion_from_text(current_emotion: str, response_text: str) -> str:
     
     if emotion_score:
         new_emotion = max(emotion_score.items(), key=lambda x: x[1])[0]
-        return new_emotion if new_emotion != current_emotions else current_emotion
+        return new_emotion if new_emotion != current_emotion else current_emotion
     
     return current_emotion #保持原有情绪
