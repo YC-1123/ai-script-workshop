@@ -6,15 +6,12 @@ class StoryState:
     """
 
     def __init__(self):
-        self.phase = ["与玛尔博的对话", "获取第一轮线索" ,"与赛布尔的对话", "获取第二轮线索", "与阿祖尔的对话", "获取第三轮线索", "推理凶手"]
+        self.phase = self.phases = ["初步调查询问", "深入审讯对质", "最终真相揭露"]
         self.current_index = 0
         self.flags = {
-            "获取第一轮线索已触发": False,
-            "与赛布尔的对话已建立": False,
-            "获取第二轮线索已建立": False,
-            "与阿祖尔的对话已建立": False,
-            "获取第三轮线索已建立": False,
-            "推理凶手已建立": False,
+            "初步调查询问已触发": False,
+            "深入审讯对质已建立": False,
+            "最终真相揭露已建立": False,
         }
 
     def get_current_phase(self) -> str:

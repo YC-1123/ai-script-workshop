@@ -24,6 +24,7 @@ class CharacterContextManager:
             self.profile.personality,
             self.profile.speaking_style,
             self.profile.emotion,
+            self.profile.special_setting,
             phase,
             context,
         )

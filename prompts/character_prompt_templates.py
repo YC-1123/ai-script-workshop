@@ -6,6 +6,7 @@ def build_character_prompt(
     personality: str, 
     style: str, 
     emotion: str, 
+    special_setting: str,
     story_phase: str, 
     history: str) -> str:
 
@@ -19,6 +20,7 @@ def build_character_prompt(
         f"性格特点：{personality}。\n"
         f"语气风格：{style}。\n"
         f"当前情绪：{emotion}。\n"
+        f"隐藏信息：{special_setting}"
         f"历史上下文摘要：{history}\n"
         f"{name}："
     )

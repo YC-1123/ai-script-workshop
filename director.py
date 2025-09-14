@@ -1,14 +1,21 @@
 # director.py
 import asyncio
+from actors.character_config import CHARACTER_NAMES
 from actors.context_manager import CharacterContextManager
 from prompts.story_templates import GetStoryIntro
+from engine.response_coordinator import ResponseCoordinator
 class StoryDirector:
     def __init__(self):
         # 定义角色名称与剧情阶段
-        self.character_names = ["埃勒里·奎因","玛尔博","赛布尔","阿祖尔"]
+        self.character_names = CHARACTER_NAMES
         self.contexts = {}
-        self.story_phases = ["初来乍到"]
+        self.story_phases = [
+            "初步调查询问", 
+            "深入审讯对质", 
+            "最终真相揭露"
+        ]
         self.phase_index = 0
+        self.coordinator = ResponseCoordinator(self.character_names)
 
     async def initialize_characters(self):
         print("【系统】剧本角色初始化中...\n")
@@ -24,7 +31,10 @@ class StoryDirector:
         for i in range(len(self.story_phases)):
             phase = self.story_phases[self.phase_index]
             print(f"\n———第{i+1}轮 · 剧情阶段【{phase}】———")
-            for name in self.character_names:
+            
+            # 使用ResponseCoordinator控制角色发言顺序
+            for _ in range(len(self.character_names)):
+                name = self.coordinator.next_character()
                 ctx = self.contexts[name]
                 # 构建角色专属Prompt，含剧情阶段
                 prompt = ctx.build_prompt(phase)
