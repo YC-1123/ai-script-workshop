@@ -10,6 +10,7 @@ class CharacterContextManager:
         self.profile = CHARACTER_CONFIGS[character_name]
         self.name = character_name
         self.history: List[str] = []
+        self.msglist: List[str] = []
         
     def initialize_context(self):
         self.history.clear()
@@ -20,11 +21,12 @@ class CharacterContextManager:
         context = "\n".join(self.history[-3:])
         prompt = build_character_prompt(
             self.name,
+            self.profile.gender,
             self.profile.background,
             self.profile.personality,
             self.profile.speaking_style,
             self.profile.emotion,
-            self.profile.special_setting,
+            self.profile.clues,
             phase,
             context,
         )
@@ -37,3 +39,4 @@ class CharacterContextManager:
     
     def update_context(self, response: str):
         self.history.append(f"{self.name}: {response}")
+        self.msglist.append(response)

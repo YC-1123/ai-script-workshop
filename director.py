@@ -42,11 +42,15 @@ class StoryDirector:
                 response = await ctx.generate_response(prompt)
                 ctx.update_context(response)
                 print(f"\n{name}:{response}")
-            self.advance_phase()
+            self.advance_phase(ctx.msglist)
 
         print("\n【系统】剧情部分推进结束")
     
-    def advance_phase(self):
-        if self.phase_index < len(self.story_phases) - 1:
-            self.phase_index += 1
+    def advance_phase(self, msglist):
+        trigger_words = ["煤炭","黑","泥土","脏"]
+        for msg in msglist:
+            if any(word in msg for word in trigger_words):
+                self.phase_index += 1
+        # if self.phase_index < len(self.story_phases) - 1:
+        #     self.phase_index += 1
         
