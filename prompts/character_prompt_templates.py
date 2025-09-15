@@ -27,9 +27,10 @@ def build_character_prompt(
     
     detective_question_section = ""
     if current_detective_question and name != "奎因侦探":
-        detective_question_section = f"\n=== 奎因探长的问题 ===\n{current_detective_question}\n"
+        detective_question_section = f"\n=== 奎因侦探的问题 ===\n{current_detective_question}\n"
     
-    return(
+    # 构建基础prompt
+    base_prompt = (
         f"=== 剧情阶段指导 ===\n"
         f"当前阶段：{story_phase}\n"
         f"行为要求：{instruction}\n\n"
@@ -42,6 +43,13 @@ def build_character_prompt(
         f"掌握线索：{clues}\n"
         f"=== 对话历史 ===\n"
         f"{history}\n\n"
-        f"接下来，请以{name}的身份，根据当前阶段要求和角色设定继续对话，同时你需要回答奎因侦探的问题【{detective_question_section}】：\n"
-        f"{name}："
+        f"接下来，请以{name}的身份，根据当前阶段要求和角色设定继续对话"
     )
+    
+    # 只在name不为奎因探长时添加回答问题的提示
+    if name != "奎因侦探":
+        base_prompt += f"，同时你需要回答奎因侦探的问题【{detective_question_section}】"
+    
+    base_prompt += f"：\n{name}："
+    
+    return base_prompt

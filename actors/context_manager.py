@@ -43,6 +43,12 @@ class CharacterContextManager:
         """设置当前奎因探长的问题"""
         self.current_detective_question = question
     
+    def add_character_info(self, other_name: str, other_profile):
+        """添加对方角色的基本信息到上下文中"""
+        info = f"对话对象：{other_name}（{other_profile.gender}），背景：{other_profile.background}，性格：{other_profile.personality}"
+        if info not in self.history:
+            self.history.append(info)
+    
     def update_context(self, response: str):
         self.history.append(f"{self.name}: {response}")
         self.msglist.append(response)

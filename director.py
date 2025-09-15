@@ -42,6 +42,19 @@ class StoryDirector:
                 
                 print(f"\n>>> {detective} 与 {suspect} 的对话 <<<")
                 
+                # 让双方了解对方的基本信息
+                detective_profile = self.contexts[detective].profile
+                suspect_profile = self.contexts[suspect].profile
+                
+                self.contexts[detective].add_character_info(suspect, suspect_profile)
+                self.contexts[suspect].add_character_info(detective, detective_profile)
+                
+                # 为当前嫌疑人添加其他嫌疑人的基本信息
+                for other_suspect in self.character_names:
+                    if other_suspect != suspect and other_suspect != detective:
+                        other_profile = self.contexts[other_suspect].profile
+                        self.contexts[suspect].add_character_info(other_suspect, other_profile)
+                
                 # 每对角色进行round_times轮对话
                 for round_num in range(self.round_times):
                     print(f"\n--- 第{round_num+1}轮对话 ---")
