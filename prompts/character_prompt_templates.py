@@ -9,7 +9,8 @@ def build_character_prompt(
     emotion: str, 
     clues: str,
     story_phase: str, 
-    history: str) -> str:
+    history: str,
+    current_detective_question: str = "") -> str:
 
     """
     构建角色生成Prompt文本，融合剧情阶段、人物设定、当前情绪与历史上下文摘要。
@@ -24,6 +25,10 @@ def build_character_prompt(
     
     instruction = phase_instructions.get(story_phase, "请根据当前情况自然对话。")
     
+    detective_question_section = ""
+    if current_detective_question and name != "奎因侦探":
+        detective_question_section = f"\n=== 奎因探长的问题 ===\n{current_detective_question}\n"
+    
     return(
         f"=== 剧情阶段指导 ===\n"
         f"当前阶段：{story_phase}\n"
@@ -34,9 +39,9 @@ def build_character_prompt(
         f"性格：{personality}\n"
         f"语气：{style}\n"
         f"当前情绪：{emotion}\n"
-        f"掌握线索：{clues}\n\n"
+        f"掌握线索：{clues}\n"
         f"=== 对话历史 ===\n"
         f"{history}\n\n"
-        f"请以{name}的身份，根据当前阶段要求和角色设定继续对话：\n"
+        f"接下来，请以{name}的身份，根据当前阶段要求和角色设定继续对话，同时你需要回答奎因侦探的问题【{detective_question_section}】：\n"
         f"{name}："
     )

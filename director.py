@@ -11,8 +11,8 @@ class StoryDirector:
         self.contexts = {}
         self.story_phases = [
             "初步调查询问", 
-            "深入审讯对质", 
-            "最终真相揭露"
+            # "深入审讯对质", 
+            # "最终真相揭露"
         ]
         self.phase_index = 0
         self.coordinator = ResponseCoordinator(self.character_names)
@@ -42,7 +42,7 @@ class StoryDirector:
                 
                 print(f"\n>>> {detective} 与 {suspect} 的对话 <<<")
                 
-                # 每对角色进行3轮对话
+                # 每对角色进行round_times轮对话
                 for round_num in range(self.round_times):
                     print(f"\n--- 第{round_num+1}轮对话 ---")
                     
@@ -53,6 +53,9 @@ class StoryDirector:
                     response = await ctx.generate_response(prompt)
                     ctx.update_context(response)
                     print(f"\n{speaker}: {response}")
+                    
+                    # 将奎因探长的问题传递给嫌疑人
+                    self.contexts[suspect].set_detective_question(response)
                     
                     # 嫌疑人回应
                     speaker = suspect

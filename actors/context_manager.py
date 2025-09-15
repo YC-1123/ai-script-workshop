@@ -11,6 +11,7 @@ class CharacterContextManager:
         self.name = character_name
         self.history: List[str] = []
         self.msglist: List[str] = []
+        self.current_detective_question: str = ""
         
     def initialize_context(self):
         self.history.clear()
@@ -29,6 +30,7 @@ class CharacterContextManager:
             self.profile.clues,
             phase,
             context,
+            self.current_detective_question
         )
         return prompt
 
@@ -36,6 +38,10 @@ class CharacterContextManager:
         # 调用 deepseek-chat 接口
         response = await generate_response(self.name, prompt)
         return response
+    
+    def set_detective_question(self, question: str):
+        """设置当前奎因探长的问题"""
+        self.current_detective_question = question
     
     def update_context(self, response: str):
         self.history.append(f"{self.name}: {response}")
