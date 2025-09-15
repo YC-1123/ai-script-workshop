@@ -1,6 +1,6 @@
 # user_input/direct_edit.py
 
-from interaction.input_router import InputRouter
+from user_input.branch_controller import InputRouter
 
 class UserQueryHandler:
     """
@@ -17,6 +17,6 @@ class UserQueryHandler:
         """
         if ":" not in raw_input:
             return "【系统】指令格式错误，应为 '命令:内容'"
-            command, content = raw_input.split(":",1)
-            return self.router.route(command.strip(), content.strip())
+        command, content = raw_input.split(":",1)
+        return self.router.route(command.strip(), content.strip())
             
