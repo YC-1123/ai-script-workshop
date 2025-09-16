@@ -6,7 +6,7 @@ class StoryState:
     """
 
     def __init__(self):
-        self.phase = self.phases = ["初步调查询问", "深入审讯对质", "最终真相揭露"]
+        self.phases = ["初步调查询问", "深入审讯对质", "最终真相揭露"]
         self.current_index = 0
         self.flags = {
             "初步调查询问已触发": False,
@@ -15,7 +15,7 @@ class StoryState:
         }
 
     def get_current_phase(self) -> str:
-        return self.phase[self.current_index]
+        return self.phases[self.current_index]
 
     def advance_phase(self):
         if self.current_index < len(self.phases) - 1:

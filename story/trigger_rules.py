@@ -1,51 +1,22 @@
 # story/trigger_rules.py
-# 触发 获取第一轮线索
-def should_trigger_clue1(messages: list) -> bool:
-    """
-    【获取第一轮线索】触发规则：任意角色xxxxxxx提及质疑、对立情绪词则触发冲突xxxxxx
-    """
-    trigger_words = ["不信", "怀疑"]
-    for msg in messages:
-        if any(word in msg for word in trigger_words):
-            return True
-        return False
 
-# 触发 与赛布尔的对话
-def should_trigger_clue2(messages: list) -> bool:
+def should_advance_to_deep_interrogation(messages: list) -> bool:
     """
-    【与赛布尔的对话】触发规则：
+    【初步调查询问】→【深入审讯对质】触发规则
     """
-    trigger_words = ["理解", "接受"]
-    return all(any(word in msg for word in key_words) for msg in messages)
+    trigger_words = ["不信", "怀疑", "可疑", "奇怪", "不对劲", "证据", "线索"]
+    return any(any(word in msg for word in trigger_words) for msg in messages)
 
-# 触发 获取第二轮线索
-def should_trigger_clue3(messages: list) -> bool:
+def should_advance_to_final_reveal(messages: list) -> bool:
     """
-    【获取第二轮线索】触发规则：
+    【深入审讯对质】→【最终真相揭露】触发规则
     """
-    trigger_words = ["理解", "接受"]
-    return all(any(word in msg for word in key_words) for msg in messages)
+    trigger_words = ["矛盾", "冲突", "不一致", "发现", "重要", "关键"]
+    return any(any(word in msg for word in trigger_words) for msg in messages)
 
-# 触发 与阿祖尔的对话
-def should_trigger_clue4(messages: list) -> bool:
+def should_end_story(messages: list) -> bool:
     """
-    【与阿祖尔的对话】触发规则：
+    【最终真相揭露】→结束剧情触发规则
     """
-    trigger_words = ["理解", "接受"]
-    return all(any(word in msg for word in key_words) for msg in messages)
-
-# 触发 获取第三轮线索
-def should_trigger_clue5(messages: list) -> bool:
-    """
-    【获取第三轮线索】触发规则：
-    """
-    trigger_words = ["理解", "接受"]
-    return all(any(word in msg for word in key_words) for msg in messages)
-
-# 触发 推理凶手
-def should_trigger_clue6(messages: list) -> bool:
-    """
-    【推理凶手】触发规则：
-    """
-    trigger_words = ["理解", "接受"]
-    return all(any(word in msg for word in key_words) for msg in messages)
+    trigger_words = ["真相", "凶手", "动机", "确定", "结论", "推理", "答案", "就是你"]
+    return any(any(word in msg for word in trigger_words) for msg in messages)
