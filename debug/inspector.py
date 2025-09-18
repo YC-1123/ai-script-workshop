@@ -15,7 +15,7 @@ class DebugConsole:
             if cmd.lower() == "quit":
                 print("退出调试控制台")
                 break
-            elif cmd.lower() === "日志回放":
+            elif cmd.lower() == "日志回放":
                 print("\n【日志最近10条】")
                 print(self.logger.read_log())
             elif cmd.lower().startswith("清除日志"):

@@ -69,19 +69,21 @@ class InputRouter:
                 return f"【系统】所有角色线索已替换为：{clues}"
         return f"【系统】已注入新线索：{clues}"
 
-    def route_status_view(self, _: str, character: str = None) -> str:
+    def route_status_view(self, content: str, character: str = None) -> str:
         if self.director:
             current_phase = self.director.story_state.get_current_phase()
-            if character:
-                # 调试信息
-                available_chars = list(self.director.contexts.keys())
-                matched_char = self._find_character(character)
+            # 如果有content且没有character，说明是"查看状态:角色名"格式
+            target_character = character if character else content
+            
+            if target_character:
+                matched_char = self._find_character(target_character)
                 
                 if matched_char:
                     ctx = self.director.contexts[matched_char]
                     return f"【系统】{matched_char} - 情绪:{ctx.profile.emotion}, 线索:{ctx.profile.clues}"
                 else:
-                    return f"【系统】角色 '{character}' 不存在，可用角色：{', '.join(available_chars)}"
+                    available_chars = list(self.director.contexts.keys())
+                    return f"【系统】角色 '{target_character}' 不存在，可用角色：{', '.join(available_chars)}"
             else:
                 # 查看所有角色状态
                 status_info = [f"阶段:{current_phase}"]
