@@ -6,6 +6,8 @@ from prompts.story_templates import GetStoryIntro
 from engine.response_coordinator import ResponseCoordinator
 from story.story_state import StoryState
 from story.trigger_rules import *
+from user_input.direct_edit import UserQueryHandler
+from user_input.input_handler import safe_input
 class StoryDirector:
     def __init__(self):
         # 定义角色名称与剧情阶段
@@ -15,6 +17,8 @@ class StoryDirector:
         self.coordinator = ResponseCoordinator(self.character_names)
         self.round_times = 1  # 每对角色对话轮数
         self.conversation_history = []  # 记录所有对话内容
+        self.user_handler = UserQueryHandler(self)  # 用户输入处理器
+        self.auto_mode = True  # 默认自动模式
 
     async def initialize_characters(self):
         print("【系统】剧本角色初始化中...\n")
@@ -24,9 +28,36 @@ class StoryDirector:
         print("【系统】初始化完成，当前参与角色：", "、".join(self.character_names))
         # 输出剧情介绍 prompts.story_templates
         print(f"\n【系统】{GetStoryIntro()}")
+        
+        # 选择运行模式
+        self.select_mode()
+
+    def select_mode(self):
+        """选择运行模式"""
+        print("\n【系统】请选择运行模式：")
+        print("1. 自动模式 - 剧情自动推进")
+        print("2. 用户控制模式 - 每轮对话前可输入指令")
+        
+        while True:
+            choice = safe_input("请输入选择 (1/2): ")
+            if choice == "1":
+                self.auto_mode = True
+                print("【系统】已选择自动模式")
+                break
+            elif choice == "2":
+                self.auto_mode = False
+                print("【系统】已选择用户控制模式")
+                break
+            else:
+                print("【系统】无效选择，请输入 1 或 2")
 
     async def run_story_loop(self):
-        print("\n【系统】剧情演化开始\n")
+        print("\n【系统】剧情演化开始")
+        if self.auto_mode:
+            print("【提示】输入 '暂停' 可进入用户控制模式")
+        else:
+            print("【提示】用户控制模式，每轮对话前可输入指令")
+        print()
         
         # 对每个剧情阶段
         while self.story_state.current_index < len(self.story_state.phases):
@@ -56,7 +87,14 @@ class StoryDirector:
                 
                 # 每对角色进行round_times轮对话
                 for round_num in range(self.round_times):
-                    print(f"\n--- 第{round_num+1}轮对话 ---")
+                    # print(f"\n--- 第{round_num+1}轮对话 ---")
+                    
+                    # 检查用户输入
+                    if self.auto_mode:
+                        if await self.check_user_input():
+                            continue
+                    else:
+                        await self.user_control_prompt()
                     
                     # 奎因侦探发言
                     speaker = detective
@@ -111,4 +149,40 @@ class StoryDirector:
         
         self.story_state.advance_phase()
         self.conversation_history.clear()  # 清空对话历史，为下一阶段做准备
+        
+    async def check_user_input(self):
+        """检查是否有用户输入，非阻塞"""
+        try:
+            import select
+            import sys
+            if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
+                user_input = safe_input()
+                if user_input == "暂停":
+                    await self.enter_user_mode()
+                    return True
+        except:
+            pass
+        return False
+    
+    async def enter_user_mode(self):
+        """进入用户控制模式"""
+        print("\n【系统】进入用户控制模式，输入 '继续' 返回剧情")
+        while True:
+            user_input = safe_input("用户指令> ")
+            if user_input == "继续":
+                print("【系统】返回剧情模式")
+                break
+            result = self.user_handler.handle_user_input(user_input)
+            print(result)
+    
+    async def user_control_prompt(self):
+        """用户控制模式下的指令输入"""
+        print("【用户控制】输入指令或直接回车继续对话\n",
+              "基本指令格式：命令:角色:内容 或 命令:内容（全部角色）\n",
+              "命令：注入线索、切换情绪、查看状态、跳过阶段")
+        
+        user_input = safe_input("指令> ")
+        if user_input:
+            result = self.user_handler.handle_user_input(user_input)
+            print(result)
         

@@ -52,3 +52,11 @@ class CharacterContextManager:
     def update_context(self, response: str):
         self.history.append(f"{self.name}: {response}")
         self.msglist.append(response)
+    
+    def set_emotion(self, emotion: str):
+        """设置角色情绪，直接替换配置"""
+        self.profile.emotion = emotion
+    
+    def set_clues(self, clues: str):
+        """设置角色线索，直接替换配置"""
+        self.profile.clues = clues
